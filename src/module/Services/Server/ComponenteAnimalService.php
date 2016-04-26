@@ -61,6 +61,7 @@ class ComponenteAnimalService extends ServiceAbstract
                 }
             });
         }
+
         return $dataset;
     }
 
