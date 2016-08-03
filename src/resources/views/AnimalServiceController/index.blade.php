@@ -30,12 +30,12 @@
                     name : 'nomeAnimal',
                     data : function(obj){
                         if(!obj.nomeAnimal) return ' - ';
-                        return '<label for="_companimal_{!! $name !!}_' + obj.codigoAnimal + '">' + obj.nomeAnimal + '</label>';
+                        return '<label for="_companimal_{!! $name !!}_' + obj.id + '">' + obj.nomeAnimal + '</label>';
                     }
                 },
-                {name : 'siglaTipoSangue', data : 'siglaTipoSangue'},
-                {name : 'mascaraRegistro', data : 'mascaraRegistro'},
-                {name : 'nroPartTransferenciaProprietario', data : 'nroPartTransferenciaProprietario'},
+                {name : 'idTipoSangue', data : 'idTipoSangue'},
+                {name : 'registro', data : 'registro'},
+                {name : 'numeroParticular', data : 'numeroParticular'},
                 {name : 'idadeAnimalAreviada', data : function(obj){
                     if(!obj.idadeAnimal) return 'N/D';
                     return '<span data-toggle="tooltip" data-placement="top" data-original-title="' + obj.idadeAnimal + '">' + obj.idadeAnimalAbreviada + '</span>';
@@ -44,27 +44,27 @@
 
             @if(isset($multiple) && $multiple)
                 colunas.unshift({
-                    name : 'AnimalConsulta.codigoAnimal',
-                    data : function(obj){
-                        var idfield = '_companimal_{!! $name !!}_' + obj.codigoAnimal;
-                        if(componente.dataTableInstance.DataTableQuery().isItemChecked(obj.codigoAnimal)) {
-                            return '<input id="' + idfield + '" class="checkbox checkbox-primary chkSelecionarAnimal" type="checkbox" checked="checked" value="' + obj.codigoAnimal + '">';
-                        }
-                        return '<input id="' + idfield + '" class="checkbox checkbox-primary chkSelecionarAnimal" type="checkbox" value="' + obj.codigoAnimal + '">';
+                name : 'VAnimal.id',
+                data : function(obj){
+                    var idfield = '_companimal_{!! $name !!}_' + obj.id;
+                    if(componente.dataTableInstance.DataTableQuery().isItemChecked(obj.id)) {
+                        return '<input id="' + idfield + '" class="checkbox checkbox-primary chkSelecionarAnimal" type="checkbox" checked="checked" value="' + obj.id + '">';
                     }
-                });
+                    return '<input id="' + idfield + '" class="checkbox checkbox-primary chkSelecionarAnimal" type="checkbox" value="' + obj.id + '">';
+                }
+            });
             @else
                 colunas.push({
-                    name : 'AnimalConsulta.codigoAnimal',
-                    data : function(obj){
-                        var idfield = '_companimal_{!! $name !!}_' + obj.codigoAnimal;
-                        return '<button id="' + idfield + '" class="btn btn-sm btn-primary btnSelecionarAnimal" codigo="' + obj.codigoAnimal + '">Selecionar</button>';
-                    }
-                });
+                name : 'VAnimal.id',
+                data : function(obj){
+                    var idfield = '_companimal_{!! $name !!}_' + obj.id;
+                    return '<button id="' + idfield + '" class="btn btn-sm btn-primary btnSelecionarAnimal" codigo="' + obj.id + '">Selecionar</button>';
+                }
+            });
             @endif
 
 
-            componente.dataTableInstance = $(".comp-tbl-search-animal")
+                    componente.dataTableInstance = $(".comp-tbl-search-animal")
                     .on('xhr.dt', function(){
                         setTimeout(function(){
                             $("[data-toggle=tooltip]").tooltip();
@@ -76,9 +76,9 @@
                             idField : 'codigoAnimal',
                             filtersCallback : function(obj){
                                 @if($_attrFilters)
-                                    @foreach($_attrFilters as $attr => $val)
+                                        @foreach($_attrFilters as $attr => $val)
                                         obj['{!! $attr !!}'] = '{!! $val !!}';
-                                    @endforeach
+                                @endforeach
                                 @endif
                             }
                         },
