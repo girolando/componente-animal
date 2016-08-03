@@ -8,7 +8,8 @@
 namespace Girolando\Componentes\Animal\Services\Server;
 
 
-use Girolando\Componentes\Animal\Entities\Views\AnimalConsulta;
+use Girolando\BaseComponent\Engines\DatasetEngine;
+use Girolando\Componentes\Animal\Entities\Views\VAnimal;
 use Girolando\Componentes\Animal\Extensions\DataTableQuery;
 use Girolando\Componentes\Animal\Repositories\Views\AnimalConsultaRepository;
 use Andersonef\Repositories\Abstracts\ServiceAbstract;
@@ -18,7 +19,7 @@ use yajra\Datatables\Datatables;
 
 class ComponenteAnimalService extends ServiceAbstract
 {
-
+    protected $datasetEngine;
     /**
      * This constructor will receive by dependency injection a instance of AnimalConsultaRepository and DatabaseManager.
      *
@@ -28,39 +29,17 @@ class ComponenteAnimalService extends ServiceAbstract
     public function __construct(AnimalConsultaRepository $repository, DatabaseManager $db)
     {
         parent::__construct($repository, $db);
+        $this->datasetEngine = new DatasetEngine($this);
+
     }
 
     public function getAnimalDataset($dataTableQueryName = 'animalConsulta')
     {
-        $dataTableQuery = DataTableQuery::getInstance($dataTableQueryName);
-        $filters = (array) $dataTableQuery->getFilters();
-        $retorno = $this->getQuery();
-        if($filters){
-            $searchableFields = (new AnimalConsulta())->getFillable();
-            $nfilters = [];
-            foreach($filters as $filter => $value){
-                if(!in_array($filter, $searchableFields)) continue;
-                $nfilters[$filter] = $value;
-            }
-            if($nfilters) {
-                $retorno = $this->findBy($nfilters);
-                $retorno = $retorno->getQuery();
-            }
-        }
-
-        $retorno->select(['*']);
-        $dataset = $dataTableQuery->apply($retorno);
-
-
-        $request = Request::capture();
-        if($request->has('customFilters')){
-            $customFilters = $request->get('customFilters');
-            $dataset->where( function($query) use($customFilters) {
-                foreach($customFilters as $filter => $value){
-                    $query->orWhere($filter, 'like', $value);
-                }
-            });
-        }
+        $dataset = $this
+            ->datasetEngine
+            ->usingDataTableQuery($dataTableQueryName)
+            ->createDataset((new VAnimal())->getFillable());
+        //como não tem nenhuma validação, nenhum tipo de filtro especial pra fazer nesse querybuilder... então já retorno o dataset.(que é um querybuilder... só add nele outros wheres q eu possa precisar)
 
         return $dataset;
     }
@@ -68,14 +47,15 @@ class ComponenteAnimalService extends ServiceAbstract
     public function getAnimalDatatableJson($datasetName = 'animalConsulta')
     {
         $dataset = $this->getAnimalDataset($datasetName);
+        //esse componente tem 2 colunas diferenciadas... crio elas aqui.
 
         return Datatables::of($dataset)
             ->addColumn('idadeAnimal', function($row){
-                $row = (new AnimalConsulta())->fill(['dataNascimentoAnimal' => $row->dataNascimentoAnimal]);
+                $row = (new VAnimal())->fill(['dataNascimentoAnimal' => $row->dataNascimentoAnimal]);
                 return $row->idadeAnimal;
             })
             ->addColumn('idadeAnimalAbreviada', function($row){
-                $row = (new AnimalConsulta())->fill(['dataNascimentoAnimal' => $row->dataNascimentoAnimal]);
+                $row = (new VAnimal())->fill(['dataNascimentoAnimal' => $row->dataNascimentoAnimal]);
                 return $row->idadeAnimalAbreviada;
             })
             ->make(true);

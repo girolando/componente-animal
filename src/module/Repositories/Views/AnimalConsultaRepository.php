@@ -2,7 +2,7 @@
 namespace Girolando\Componentes\Animal\Repositories\Views;
 
 use Andersonef\Repositories\Abstracts\RepositoryAbstract;
-use Girolando\Componentes\Animal\Entities\Views\AnimalConsulta;
+use Girolando\Componentes\Animal\Entities\Views\VAnimal;
 
 /**
  * Data repository to work with entity AnimalConsulta.
@@ -15,7 +15,7 @@ class AnimalConsultaRepository extends RepositoryAbstract{
 
     public function entity()
     {
-        return AnimalConsulta::class;
+        return VAnimal::class;
     }
 
 }
