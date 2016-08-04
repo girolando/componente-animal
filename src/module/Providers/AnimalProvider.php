@@ -2,6 +2,9 @@
 namespace Girolando\Componentes\Animal\Providers;
 
 use Girolando\BaseComponent\Providers\BaseComponentProvider;
+use Girolando\Componentes\Animal\Commands\DownCommand;
+use Girolando\Componentes\Animal\Commands\RefreshCommand;
+use Girolando\Componentes\Animal\Commands\UpCommand;
 use Girolando\Componentes\Animal\Facades\ComponenteAnimal;
 use Girolando\Componentes\Animal\Services\AnimalService;
 use Illuminate\Routing\Router;
@@ -38,6 +41,7 @@ class AnimalProvider extends BaseComponentProvider{
         $this->app->bind('Girolando.Componente.Animal', AnimalService::class);
         $loader = \Illuminate\Foundation\AliasLoader::getInstance();
         $loader->alias('ComponenteAnimal', ComponenteAnimal::class);
+        $this->commands([UpCommand::class, DownCommand::class]);
 
     }
 }

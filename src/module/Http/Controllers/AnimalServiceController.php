@@ -3,6 +3,7 @@
 namespace Girolando\Componentes\Animal\Http\Controllers;
 
 use Andersonef\ApiClientLayer\Services\ApiConnector;
+use Girolando\Componentes\Animal\Entities\Views\VAnimal;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -44,6 +45,7 @@ class AnimalServiceController extends Controller
         }
 
         $request->merge(['_attrFilters' => $filters]);
+        $request->merge(['tableName' => (new VAnimal())->getTable()]);
 
         return view('ComponenteAnimal::AnimalServiceController.index', $request->all());
     }

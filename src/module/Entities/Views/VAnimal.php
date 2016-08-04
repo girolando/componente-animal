@@ -12,7 +12,7 @@ class VAnimal extends Model
     /**
      * @var string
      */
-    protected $table = "VAnimal";
+    protected $table = "comp.Animal";
 
 
     protected $appends = ['idadeAnimal', 'idadeAnimalAbreviada'];

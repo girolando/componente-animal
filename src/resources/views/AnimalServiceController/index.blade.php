@@ -44,7 +44,7 @@
 
             @if(isset($multiple) && $multiple)
                 colunas.unshift({
-                name : 'VAnimal.id',
+                name : '{!! $tableName !!}.id',
                 data : function(obj){
                     var idfield = '_companimal_{!! $name !!}_' + obj.id;
                     if(componente.dataTableInstance.DataTableQuery().isItemChecked(obj.id)) {
@@ -55,7 +55,7 @@
             });
             @else
                 colunas.push({
-                name : 'VAnimal.id',
+                name : '{!! $tableName !!}.id',
                 data : function(obj){
                     var idfield = '_companimal_{!! $name !!}_' + obj.id;
                     return '<button id="' + idfield + '" class="btn btn-sm btn-primary btnSelecionarAnimal" codigo="' + obj.id + '">Selecionar</button>';
