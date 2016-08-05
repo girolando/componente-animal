@@ -30,6 +30,9 @@
                     name : 'nomeAnimal',
                     data : function(obj){
                         if(!obj.nomeAnimal) return ' - ';
+                        if(obj.statusAnimal == 0){
+                            obj.nomeAnimal = '<span class="label label-danger" data-toggle="tooltip" data-placement="top" data-original-title="' + obj.descTipoBaixa + '">' + obj.nomeAnimal + '</b></span>';
+                        }
                         return '<label for="_companimal_{!! $name !!}_' + obj.id + '">' + obj.nomeAnimal + '</label>';
                     }
                 },
@@ -73,7 +76,7 @@
                     .CustomDataTable({
                         name : '_dataTableQuery{!! $name !!}',
                         queryParams : {
-                            idField : 'codigoAnimal',
+                            idField : '{!! $tableName !!}.id',
                             filtersCallback : function(obj){
                                 @if($_attrFilters)
                                         @foreach($_attrFilters as $attr => $val)
