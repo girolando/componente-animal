@@ -112,10 +112,12 @@ class VAnimal extends Model
         'registroMae',
         'idTipoSanguePai',
         'idTipoSangueMae',
+        'idTransferenciaProprietario',
         'nomeProprietario',
         'idProprietario',
         'idFazendaProprietario',
         'nomeFazendaProprietario',
+        'idTransferenciaCriador',
         'nomeCriador',
         'idCriador',
         'idFazendaCriador',
@@ -126,5 +128,7 @@ class VAnimal extends Model
         'botton',
         'tipoRegistro',
         'registro',
+        'idTipoBaixa',
+        'descTipoBaixa',
     ];
 }
