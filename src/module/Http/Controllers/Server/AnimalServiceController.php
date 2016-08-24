@@ -1,7 +1,6 @@
 <?php
 namespace Girolando\Componentes\Animal\Http\Controllers\Server;
 
-use Girolando\Componentes\Animal\Services\Server\AnimalService;
 use Girolando\Componentes\Animal\Services\Server\ComponenteAnimalService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
