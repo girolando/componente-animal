@@ -3,6 +3,7 @@
 namespace Girolando\Componentes\Animal\Http\Controllers;
 
 use Andersonef\ApiClientLayer\Services\ApiConnector;
+use App\Entities\UsuarioLogado;
 use Girolando\Componentes\Animal\Entities\Views\VAnimal;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class AnimalServiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, UsuarioLogado $usuarioLogado)
     {
         if($request->has('_DataTableQuery')){
             $response = $this->apiConnector->get('/vendor-girolando/server/componentes/animal', $request->all());
@@ -47,6 +48,7 @@ class AnimalServiceController extends Controller
 
         $request->merge(['_attrFilters' => $filters]);
         $request->merge(['tableName' => (new VAnimal())->getTable()]);
+        $request->merge(['usuario' => $usuarioLogado]);
 
         return view('ComponenteAnimal::AnimalServiceController.index', $request->all());
     }
