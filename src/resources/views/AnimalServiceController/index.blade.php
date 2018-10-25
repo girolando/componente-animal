@@ -46,7 +46,7 @@
             var pessoaSelecionada = {!! $usuario->codigoPessoa !!};
             componentePessoa.addEventListener(Componente.EVENTS.ON_FINISH, function(pessoa) {
                 if (!pessoa) return;
-                pessoaSelecionada = pessoa;
+                pessoaSelecionada = pessoa.id;
                 $(".nnnnnnomePessoa").val(pessoa.nomePessoa);
                 componente.dataTableInstance.draw();
             });
@@ -106,7 +106,7 @@
                             idField : '{!! $tableName !!}.id',
                             filtersCallback : function(obj){
                                 if (pessoaSelecionada) {
-                                    obj.idProprietario = pessoaSelecionada.id;
+                                    obj.idProprietario = pessoaSelecionada;
                                     console.log('setei o proprietario na busca: ', obj);
                                 }
                                 @if($_attrFilters)
