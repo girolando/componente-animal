@@ -1,6 +1,24 @@
+{!! ComponentePessoa::init() !!}
 @extends('layout.blank.index')
 
 @section('content')
+    <fieldset>
+        <legend>Filtros</legend>
+        <div class="row form">
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Proprietário</label>
+                <div class="col-md-8 input-group">
+                    <input type="text" class="form-control nnnnnnomePessoa" value="{!! $usuario->nomePessoa !!}">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-white __componenteCriador" id="ccccomponenteCriador" data-toggle="tooltip">
+                                <span class="fa fa-search"></span>&nbsp;
+                        </button>
+                        <componente type="pessoa" name="ccccodigoPessoa" dispatcher-button=".__componenteCriador" />
+                    </span>
+                </div>
+            </div>
+        </div>
+    </fieldset>
     <table class="table tooltip-demo table-stripped table-hover comp-tbl-search-animal" data-page-size="10" data-filter=#filter>
         <thead>
         @if(isset($multiple) && $multiple)
@@ -24,6 +42,14 @@
 
         Componente.scope(function(){ //escopando as variáveis para não conflitarem com possíveis outros componentes do mesmo tipo abertos na tela
             var componente = Componente.AnimalFactory.get('{!! $name !!}');
+            var componentePessoa = Componente.PessoaFactory.get('ccccodigoPessoa');
+            var pessoaSelecionada = {!! $usuario->codigoPessoa !!};
+            componentePessoa.addEventListener(Componente.EVENTS.ON_FINISH, function(pessoa) {
+                if (!pessoa) return;
+                pessoaSelecionada = pessoa;
+                $(".nnnnnnomePessoa").val(pessoa.nomePessoa);
+                componente.dataTableInstance.draw();
+            });
 
             var colunas = [
                 {
@@ -33,6 +59,7 @@
                         if(obj.statusAnimal == 0){
                             obj.nomeAnimal = '<span class="label label-danger" data-toggle="tooltip" data-placement="top" data-original-title="' + obj.descTipoBaixa + '">' + obj.nomeAnimal + '</b></span>';
                         }
+                        obj.codigoPessoaProprietario = pessoaSelecionada.id;
                         return '<label for="_companimal_{!! $name !!}_' + obj.id + '">' + obj.nomeAnimal + '</label>';
                     }
                 },
@@ -78,6 +105,10 @@
                         queryParams : {
                             idField : '{!! $tableName !!}.id',
                             filtersCallback : function(obj){
+                                if (pessoaSelecionada) {
+                                    obj.idProprietario = pessoaSelecionada.id;
+                                    console.log('setei o proprietario na busca: ', obj);
+                                }
                                 @if($_attrFilters)
                                         @foreach($_attrFilters as $attr => $val)
                                         obj['{!! $attr !!}'] = '{!! $val !!}';
