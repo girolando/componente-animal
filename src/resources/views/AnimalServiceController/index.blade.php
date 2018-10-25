@@ -8,46 +8,59 @@
             <div class="col-md-12">
                 <label class="col-md-4 control-label">Proprietário</label>
                 <div class="col-md-8 input-group">
-                    <input type="text" class="form-control nnnnnnomePessoa" value="{!! $usuario->nomePessoa !!}">
+                    <input type="text" class="form-control {!! $name !!}nnnnnomePessoa" value="{!! $usuario->nomePessoa !!}">
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-white __componenteCriador" id="ccccomponenteCriador" data-toggle="tooltip">
+                        <button type="button" class="btn btn-white {!! $name !!}_subcompCodigoPessoa__componenteCriador" data-toggle="tooltip">
                                 <span class="fa fa-search"></span>&nbsp;
                         </button>
-                        <componente type="pessoa" name="ccccodigoPessoa" dispatcher-button=".__componenteCriador" />
+                        <button type="button" class="btn btn-white {!! $name !!}btnlimpar" data-toggle="tooltip">
+                                <span class="fa fa-trash-o"></span>&nbsp;
+                        </button>
+                        <componente type="pessoa" name="{!! $name !!}_subcompCodigoPessoa" dispatcher-button=".{!! $name !!}_subcompCodigoPessoa__componenteCriador" />
                     </span>
                 </div>
             </div>
         </div>
     </fieldset>
-    <table class="table tooltip-demo table-stripped table-hover comp-tbl-search-animal" data-page-size="10" data-filter=#filter>
-        <thead>
-        @if(isset($multiple) && $multiple)
-            <th>#</th>
-        @endif
-        <th>Animal</th>
-        <th>G. Sang.</th>
-        <th>Registro</th>
-        <th>Botton Nr. Part.</th>
-        <th>Idade</th>
+    <div class="companimal_{!! $name !!}">
+        <table class="table tooltip-demo table-stripped table-hover comp-tbl-search-animal" data-page-size="10" data-filter=#filter>
+            <thead>
+            @if(isset($multiple) && $multiple)
+                <th>#</th>
+            @endif
+            <th>Animal</th>
+            <th>G. Sang.</th>
+            <th>Registro</th>
+            <th>Botton Nr. Part.</th>
+            <th>Idade</th>
 
-        @if(!(isset($multiple) && $multiple))
-            <th>Selecionar</th>
-        @endif
-        </thead>
-    </table>
+            @if(!(isset($multiple) && $multiple))
+                <th>Selecionar</th>
+            @endif
+            </thead>
+        </table>
+    </div>
 @endsection
 
 @section('javascript')
     <script type="text/javascript">
+        var tabela = null;
 
         Componente.scope(function(){ //escopando as variáveis para não conflitarem com possíveis outros componentes do mesmo tipo abertos na tela
+            Componente.PessoaFactory.initialize();
             var componente = Componente.AnimalFactory.get('{!! $name !!}');
-            var componentePessoa = Componente.PessoaFactory.get('ccccodigoPessoa');
+            var componentePessoa = Componente.PessoaFactory.get('{!! $name !!}_subcompCodigoPessoa');
             var pessoaSelecionada = {!! $usuario->codigoPessoa !!};
             componentePessoa.addEventListener(Componente.EVENTS.ON_FINISH, function(pessoa) {
                 if (!pessoa) return;
                 pessoaSelecionada = pessoa.id;
-                $(".nnnnnnomePessoa").val(pessoa.nomePessoa);
+                $(".{!! $name !!}nnnnnomePessoa").val(pessoa.nomePessoa);
+                componente.dataTableInstance.draw();
+            });
+
+            $(".{!! $name !!}btnlimpar").on('click', function() {
+                pessoaSelecionada = null;
+                $(".{!! $name !!}nnnnnomePessoa").val('');
                 componente.dataTableInstance.draw();
             });
 
@@ -59,7 +72,6 @@
                         if(obj.statusAnimal == 0){
                             obj.nomeAnimal = '<span class="label label-danger" data-toggle="tooltip" data-placement="top" data-original-title="' + obj.descTipoBaixa + '">' + obj.nomeAnimal + '</b></span>';
                         }
-                        obj.codigoPessoaProprietario = pessoaSelecionada.id;
                         return '<label for="_companimal_{!! $name !!}_' + obj.id + '">' + obj.nomeAnimal + '</label>';
                     }
                 },
@@ -108,6 +120,8 @@
                                 if (pessoaSelecionada) {
                                     obj.idProprietario = pessoaSelecionada;
                                     console.log('setei o proprietario na busca: ', obj);
+                                } else {
+                                    delete obj.idProprietario;
                                 }
                                 @if($_attrFilters)
                                         @foreach($_attrFilters as $attr => $val)
@@ -122,6 +136,12 @@
                             data : function(obj){
                                 obj.name = '{!! $name !!}';
                             }
+                        }
+                    });
+                    $(".companimal_{!! $name !!} .dataTables_filter input").unbind().on('keydown', function(e) {
+                        if (e.keyCode == 13) {
+                            componente.dataTableInstance.search($(this).val());
+                            componente.dataTableInstance.draw();
                         }
                     });
 
