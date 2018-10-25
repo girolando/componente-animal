@@ -55,12 +55,14 @@
                 if (!pessoa) return;
                 pessoaSelecionada = pessoa.id;
                 $(".{!! $name !!}nnnnnomePessoa").val(pessoa.nomePessoa);
+                System.beginLoading($('.companimal_{!! $name !!}').parent().parent());
                 componente.dataTableInstance.draw();
             });
 
             $(".{!! $name !!}btnlimpar").on('click', function() {
                 pessoaSelecionada = null;
                 $(".{!! $name !!}nnnnnomePessoa").val('');
+                System.beginLoading($('.companimal_{!! $name !!}').parent().parent());
                 componente.dataTableInstance.draw();
             });
 
@@ -108,6 +110,7 @@
 
                     componente.dataTableInstance = $(".comp-tbl-search-animal")
                     .on('xhr.dt', function(){
+                        System.stopLoading();
                         setTimeout(function(){
                             $("[data-toggle=tooltip]").tooltip();
                         }, 0);
@@ -140,6 +143,7 @@
                     });
                     $(".companimal_{!! $name !!} .dataTables_filter input").unbind().on('keydown', function(e) {
                         if (e.keyCode == 13) {
+                            System.beginLoading($('.companimal_{!! $name !!}').parent().parent());
                             componente.dataTableInstance.search($(this).val());
                             componente.dataTableInstance.draw();
                         }
