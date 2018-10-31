@@ -51,8 +51,15 @@
             var componente = Componente.AnimalFactory.get('{!! $name !!}');
             var componentePessoa = Componente.PessoaFactory.get('{!! $name !!}_subcompCodigoPessoa');
             var pessoaSelecionada = {!! $usuario->codigoPessoa !!};
+
+            @if ($usuario->is('Funcionario'))
+                pessoaSelecionada = null;
+                $(".{!! $name !!}nnnnnomePessoa").val('');
+            @endif
+
             componentePessoa.addEventListener(Componente.EVENTS.ON_FINISH, function(pessoa) {
                 if (!pessoa) return;
+                console.log('PESSOA SELECIONADA => ', pessoa);
                 pessoaSelecionada = pessoa.id;
                 $(".{!! $name !!}nnnnnomePessoa").val(pessoa.nomePessoa);
                 System.beginLoading($('.companimal_{!! $name !!}').parent().parent());
@@ -78,7 +85,16 @@
                     }
                 },
                 {name : 'idTipoSangue', data : 'idTipoSangue'},
-                {name : 'registro', data : 'registro'},
+                {name : 'registro', data: function(animal) {
+                    var tipo = 'OUTROS';
+                    switch (animal.tipoRegistro) {
+                        case 'B': tipo = 'REGISTRO BASE'; break;
+                        case 'D': tipo = 'DEFINITIVO'; break;
+                        case 'F': tipo = 'FUNDAÇÃO'; break;
+                        case 'N': tipo = 'NASCIMENTO'; break;
+                    }
+                    return '<span data-toggle="tooltip" data-placement="top" data-original-title="' + tipo + '">' + animal.registro + '</span>';
+                }},
                 {name : 'numeroParticular', data : 'numeroParticular'},
                 {name : 'idadeAnimalAreviada', data : function(obj){
                     if(!obj.idadeAnimal) return 'N/D';
