@@ -11,6 +11,7 @@
                 this.name = name;
                 this.dataTableInstance = null;
                 var self = this;
+                var titulo = attributes['data-title'] || '{!! trans('ComponenteAnimal::Services/Componentes/AnimalService._init.titModal') !!}';
 
                 /*** Lógica de construtor do componente ****/
 
@@ -36,7 +37,7 @@
                                 self.triggerEvent(Componente.EVENTS.ON_FINISH, self.selectedItems.values());
                                 return;
                             }
-                        }, '{!! trans('ComponenteAnimal::Services/Componentes/AnimalService._init.titModal') !!}');
+                        }, titulo);
 
 
                         if(!self.getAttributes().multiple){
