@@ -88,10 +88,12 @@
                 {name : 'registro', data: function(animal) {
                     var tipo = 'OUTROS';
                     switch (animal.tipoRegistro) {
-                        case 'B': tipo = 'REGISTRO BASE'; break;
-                        case 'D': tipo = 'DEFINITIVO'; break;
-                        case 'F': tipo = 'FUNDAÇÃO'; break;
-                        case 'N': tipo = 'NASCIMENTO'; break;
+                        case 'BASE': tipo = 'REGISTRO BASE'; break;
+                        case 'RGDGD': tipo = 'DEFINITIVO GD'; break;
+                        case 'RGD': tipo = 'DEFINITIVO'; break;
+                        case 'RF': tipo = 'FUNDAÇÃO'; break;
+                        case 'RGN': tipo = 'NASCIMENTO'; break;
+                        case 'RGNANT': tipo = 'NASCIMENTO ANTIGO'; break;
                     }
                     return '<span data-toggle="tooltip" data-placement="top" data-original-title="' + tipo + '">' + animal.registro + '</span>';
                 }},
