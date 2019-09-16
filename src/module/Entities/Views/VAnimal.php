@@ -128,6 +128,7 @@ class VAnimal extends Model
         'botton',
         'tipoRegistro',
         'registro',
+        'registroLimpoAnimal',
         'idTipoBaixa',
         'descTipoBaixa',
     ];
