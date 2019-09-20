@@ -16,7 +16,7 @@
                         <button type="button" class="btn btn-white {!! $name !!}btnlimpar" data-toggle="tooltip">
                                 <span class="fa fa-trash-o"></span>&nbsp;
                         </button>
-                        <componente type="pessoa" name="{!! $name !!}_subcompCodigoPessoa" dispatcher-button=".{!! $name !!}_subcompCodigoPessoa__componenteCriador" />
+                        <componente filter-isCriador="1" type="pessoa" name="{!! $name !!}_subcompCodigoPessoa" dispatcher-button=".{!! $name !!}_subcompCodigoPessoa__componenteCriador" />
                     </span>
                 </div>
             </div>
