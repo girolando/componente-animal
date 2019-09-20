@@ -131,6 +131,13 @@
                         System.stopLoading();
                         setTimeout(function(){
                             $("[data-toggle=tooltip]").tooltip();
+                            if (componente.dataTableInstance.rows().data().length === 1) {
+                                @if(isset($multiple) && $multiple)
+                                    $(".chkSelecionarAnimal", componente.modalInstance).trigger('change');
+                                @else
+                                    $(".btnSelecionarAnimal", componente.modalInstance).trigger('click');
+                                @endif
+                            }
                         }, 0);
                     })
                     .CustomDataTable({
@@ -170,15 +177,15 @@
 
             @if(isset($multiple) && $multiple)
                 componente.modalInstance.delegate('.chkSelecionarAnimal', 'change', function(){
-                var val = $(this).val();
-                var obj = componente.dataTableInstance.row($(this).closest('tr'));
-                if(!componente.dataTableInstance.DataTableQuery().isChecked(val)){
-                    componente.selectedItems.put(val, obj.data());
-                    return componente.dataTableInstance.DataTableQuery().addItem(val);
-                }
-                componente.selectedItems.remove(val);
-                return componente.dataTableInstance.DataTableQuery().removeItem(val);
-            });
+                    var val = $(this).val();
+                    var obj = componente.dataTableInstance.row($(this).closest('tr'));
+                    if(!componente.dataTableInstance.DataTableQuery().isChecked(val)){
+                        componente.selectedItems.put(val, obj.data());
+                        return componente.dataTableInstance.DataTableQuery().addItem(val);
+                    }
+                    componente.selectedItems.remove(val);
+                    return componente.dataTableInstance.DataTableQuery().removeItem(val);
+                });
             @else
                 componente.modalInstance.delegate('.btnSelecionarAnimal', 'click', function(){
                 var animal = componente.dataTableInstance.row($(this).closest('tr')).data();

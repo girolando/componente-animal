@@ -58,6 +58,10 @@ class ComponenteAnimalService extends ServiceAbstract
                 $row = (new VAnimal())->fill(['dataNascimentoAnimal' => $row->dataNascimentoAnimal]);
                 return $row->idadeAnimalAbreviada;
             })
+            ->addColumn('codigosProprietariosCopiaRegistro', function($row) {
+                $row = (new VAnimal())->fill(['id' => $row->id]);
+                return $row->codigosProprietariosCopiaRegistro;
+            })
             ->make(true);
     }
 
