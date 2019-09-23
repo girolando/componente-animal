@@ -27,13 +27,15 @@ class VAnimal extends Model
     public static $snakeAttributes = false;
 
 
-    public function getCodigosProprietariosCopiaRegistro()
+    public function getCodigosProprietariosCopiaRegistroAttribute()
     {
         $copias = \DB::table('CopiaRegistro')
             ->where('codigoAnimal', '=', $this->id)
             ->select('codigoPessoaAssociado')
             ->distinct()
             ->get();
+
+            \DB::table('CopiaRegistro')->where('codigoAnimal', '=', 505545)->select('codigoPessoaAssociado')->distinct()->get();
 
         return collect($copias)->pluck('codigoPessoaAssociado');
     }
