@@ -132,10 +132,8 @@
                         setTimeout(function(){
                             $("[data-toggle=tooltip]").tooltip();
                             if (componente.dataTableInstance.rows().data().length === 1) {
-                                @if(isset($multiple) && $multiple)
-                                    $(".chkSelecionarAnimal", componente.modalInstance).trigger('change');
-                                @else
-                                    $(".btnSelecionarAnimal", componente.modalInstance).trigger('click');
+                                @if(!(isset($multiple) && $multiple))
+                                    $(".btnSelecionarAnimal", componente.modalInstance).trigger('click');  
                                 @endif
                             }
                         }, 0);
