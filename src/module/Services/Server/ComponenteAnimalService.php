@@ -35,10 +35,18 @@ class ComponenteAnimalService extends ServiceAbstract
 
     public function getAnimalDataset($dataTableQueryName = 'animalConsulta')
     {
+        $request = \Request::capture();
+        $fillable = (new VAnimal())->getFillable();
+        // FIXIT: Não entendo o motivo desse fillable não trazer a coluna 'codigoTipoSangue'. Resolvi concatenar aqui no código:
+        $fillable[] = 'codigoTipoSangue';
+
         $dataset = $this
             ->datasetEngine
             ->usingDataTableQuery($dataTableQueryName)
-            ->createDataset((new VAnimal())->getFillable());
+            ->createDataset($fillable);
+        if ($request->get('codigoTipoSangue')) {
+            $dataset->where('codigoTipoSangue', '=', $request->get('codigoTipoSangue'));
+        }
         //como não tem nenhuma validação, nenhum tipo de filtro especial pra fazer nesse querybuilder... então já retorno o dataset.(que é um querybuilder... só add nele outros wheres q eu possa precisar)
 
         return $dataset;

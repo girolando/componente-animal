@@ -5,7 +5,7 @@
     <fieldset>
         <legend>Filtros</legend>
         <div class="row form">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <label class="col-md-4 control-label">Proprietário</label>
                 <div class="col-md-8 input-group">
                     <input type="text" class="form-control {!! $name !!}nnnnnomePessoa" value="{!! $usuario->nomePessoa !!}">
@@ -18,6 +18,18 @@
                         </button>
                         <componente filter-isCriador="1" type="pessoa" name="{!! $name !!}_subcompCodigoPessoa" dispatcher-button=".{!! $name !!}_subcompCodigoPessoa__componenteCriador" />
                     </span>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="col-md-4 control-label">Comp. Racial</label>
+                <div class="col-md-8 input-group">
+                    <select class="form-control filtroBuscaSangueComponenteAnimal">
+                        <option value="-1">SELECIONE</option>
+                        @foreach($sangues as $sangue)
+                            <option value="{!! $sangue->codigoTipoSangue !!}"> {{ $sangue->codigoTipoSangue . ' - ' . $sangue->descTipoSangue }} </option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
         </div>
@@ -161,6 +173,10 @@
                             url : '/vendor-girolando/componentes/animal',
                             data : function(obj){
                                 obj.name = '{!! $name !!}';
+                                const $selectSangue = $(".filtroBuscaSangueComponenteAnimal", componente.modalInstance);
+                                if ($selectSangue.val() > 0) {
+                                    obj['codigoTipoSangue'] = $selectSangue.val();
+                                }
                             }
                         }
                     });
@@ -172,6 +188,9 @@
                         }
                     });
 
+                    $(".filtroBuscaSangueComponenteAnimal", componente.modalInstance).on('change', function() {
+                        componente.dataTableInstance.draw();
+                    });
 
             @if(isset($multiple) && $multiple)
                 componente.modalInstance.delegate('.chkSelecionarAnimal', 'change', function(){

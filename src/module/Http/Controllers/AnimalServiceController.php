@@ -31,6 +31,7 @@ class AnimalServiceController extends Controller
      */
     public function index(Request $request, UsuarioLogado $usuarioLogado)
     {
+        
         if($request->has('_DataTableQuery')){
             $response = $this->apiConnector->get('/vendor-girolando/server/componentes/animal', $request->all());
 
@@ -49,6 +50,36 @@ class AnimalServiceController extends Controller
         $request->merge(['_attrFilters' => $filters]);
         $request->merge(['tableName' => (new VAnimal())->getTable()]);
         $request->merge(['usuario' => $usuarioLogado]);
+
+        
+        $sangues = $this->apiConnector->get('/vendor-girolando/server/componentes/animal/tiposangue');
+        $sangues = collect($sangues->data)
+            ->map(function($sangue) {
+                if (is_null($sangue->ordemMapaTipoSangue)) {
+                    $sangue->ordemMapaTipoSangue = 999;
+                }
+                return $sangue;
+            })
+            ->filter(function($element) use ($filters) {
+                $sangues = null;
+                if (empty($filters['codigotiposangue'])) {
+                    return true;
+                }
+                $sangues = $filters['codigotiposangue'];
+                if (strpos($sangues, '|') !== false) {
+                    $sangues = explode('|', $sangues);
+                }
+                if (!is_array($sangues)) {
+                    $sangues = [$sangues];
+                }
+                if (in_array($element->codigoTipoSangue, $sangues)) {
+                    return true;
+                }
+                return false;
+            })
+            ->sortBy('ordemMapaTipoSangue');
+            
+        $request->merge(['sangues' => $sangues]);
 
         return view('ComponenteAnimal::AnimalServiceController.index', $request->all());
     }
