@@ -5,7 +5,7 @@
     <fieldset>
         <legend>Filtros</legend>
         <div class="row form">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <label class="col-md-4 control-label">Proprietário</label>
                 <div class="col-md-8 input-group">
                     <input type="text" class="form-control {!! $name !!}nnnnnomePessoa" value="{!! $usuario->nomePessoa !!}">
@@ -20,18 +20,6 @@
                     </span>
                 </div>
             </div>
-
-            <div class="col-md-6">
-                <label class="col-md-4 control-label">Comp. Racial</label>
-                <div class="col-md-8 input-group">
-                    <select class="form-control filtroBuscaSangueComponenteAnimal">
-                        <option value="-1">SELECIONE</option>
-                        @foreach($sangues as $sangue)
-                            <option value="{!! $sangue->codigoTipoSangue !!}"> {{ $sangue->codigoTipoSangue . ' - ' . $sangue->descTipoSangue }} </option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
         </div>
     </fieldset>
     <div class="companimal_{!! $name !!}">
@@ -44,7 +32,7 @@
             <th>G. Sang.</th>
             <th>Registro</th>
             <th>Botton Nr. Part.</th>
-            <th>Idade</th>
+            <th>Data de Nascimento</th>
 
             @if(!(isset($multiple) && $multiple))
                 <th>Selecionar</th>
@@ -111,8 +99,10 @@
                 }},
                 {name : 'numeroParticular', data : 'numeroParticular'},
                 {name : 'idadeAnimalAreviada', data : function(obj){
-                    if(!obj.idadeAnimal) return 'N/D';
-                    return '<span data-toggle="tooltip" data-placement="top" data-original-title="' + obj.idadeAnimal + '">' + obj.idadeAnimalAbreviada + '</span>';
+                    if(!obj.idadeAnimal || !obj.dataNascimentoAnimal) return 'N/D';
+                    let retorno = '<span data-toggle="tooltip" data-placement="top" data-original-title="' + obj.idadeAnimal + '">' + moment(obj.dataNascimentoAnimal).format('DD/MM/YYYY') + '</span>';
+                    retorno += '<br><small>' + obj.idadeAnimalAbreviada + '</small>';
+                    return retorno;
                 }}
             ];
 
@@ -173,10 +163,6 @@
                             url : '/vendor-girolando/componentes/animal',
                             data : function(obj){
                                 obj.name = '{!! $name !!}';
-                                const $selectSangue = $(".filtroBuscaSangueComponenteAnimal", componente.modalInstance);
-                                if ($selectSangue.val() > 0) {
-                                    obj['codigoTipoSangue'] = $selectSangue.val();
-                                }
                             }
                         }
                     });
@@ -188,9 +174,6 @@
                         }
                     });
 
-                    $(".filtroBuscaSangueComponenteAnimal", componente.modalInstance).on('change', function() {
-                        componente.dataTableInstance.draw();
-                    });
 
             @if(isset($multiple) && $multiple)
                 componente.modalInstance.delegate('.chkSelecionarAnimal', 'change', function(){
