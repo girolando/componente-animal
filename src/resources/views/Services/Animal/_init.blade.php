@@ -7,9 +7,10 @@
 
             //aki é certeza que o namespace Componente existe, portanto:
             Componente.Animal = function(name, attributes){
-                this.attributes = attributes;
-                this.name = name;
-                this.dataTableInstance = null;
+                this.attributes             = attributes;
+                this.name                   = name;
+                this.dataTableInstance      = null;
+                this.urlFindBy              = '/vendor-girolando/componentes/animal/findby';
                 var self = this;
                 var titulo = attributes['data-title'] || '{!! trans('ComponenteAnimal::Services/Componentes/AnimalService._init.titModal') !!}';
 

@@ -27,8 +27,11 @@ class AnimalProvider extends BaseComponentProvider{
     {
         $router->group(['prefix' => 'vendor-girolando', 'namespace' => 'Girolando\Componentes\Animal\Http\Controllers'], function() use($router){
             $router->resource('componentes/animal', 'AnimalServiceController', ['only' => ['index']]);
+            $router->get('componentes/animal/findby', 'AnimalServiceController@findby');
+            
             $router->resource('server/componentes/animal', 'Server\AnimalServiceController', ['only' => ['index']]);
             $router->resource('server/componentes/animal/tiposangue', 'Server\TipoSangueController', ['only' => ['index']]);
+            $router->get('server/componentes/animal/findby', 'Server\AnimalServiceController@findby');
         });
     }
 

@@ -23,6 +23,11 @@ class AnimalServiceController extends Controller
         $this->apiConnector = $apiConnector;
     }
 
+    public function findby(Request $request)
+    {
+        $response = $this->apiConnector->get('/vendor-girolando/server/componentes/animal/findby', $request->all());
+        return new JsonResponse($response->data, 200);
+    }
 
     /**
      * Display a listing of the resource.
