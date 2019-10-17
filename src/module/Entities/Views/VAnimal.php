@@ -98,6 +98,7 @@ class VAnimal extends Model
         'idTipoSangue',
         'idTipoPelagem',
         'idCategoriaTouro',
+        'codigoTipoSangue',
         'idPai',
         'idMae',
         'idAnimalOriginal',
