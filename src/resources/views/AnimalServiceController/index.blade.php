@@ -64,6 +64,7 @@
                 $(".{!! $name !!}nnnnnomePessoa").val(pessoa.nomePessoa);
                 System.beginLoading($('.companimal_{!! $name !!}').parent().parent());
                 componente.dataTableInstance.draw();
+                System.stopLoading();
             });
 
             $(".{!! $name !!}btnlimpar").on('click', function() {
@@ -71,6 +72,7 @@
                 $(".{!! $name !!}nnnnnomePessoa").val('');
                 System.beginLoading($('.companimal_{!! $name !!}').parent().parent());
                 componente.dataTableInstance.draw();
+                System.stopLoading();
             });
 
             var colunas = [
@@ -171,6 +173,7 @@
                             System.beginLoading($('.companimal_{!! $name !!}').parent().parent());
                             componente.dataTableInstance.search($(this).val());
                             componente.dataTableInstance.draw();
+                            System.stopLoading();
                         }
                     });
 
